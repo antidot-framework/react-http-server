@@ -1,0 +1,57 @@
+{
+    "name": "antidot-fw/antidot-react-http",
+    "description": "Anti.Framework on top of react http server",
+    "keywords": [
+        "psr-7",
+        "psr-11",
+        "psr-15"
+    ],
+    "type": "library",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "kpicaza"
+        }
+    ],
+    "require": {
+        "php": "^7.2.13",
+        "antidot-fw/framework": "dev-master",
+        "react/http": "^0.8.4"
+    },
+    "require-dev": {
+        "phpro/grumphp": "^0.15.0",
+        "phpstan/phpstan": "^0.11.5",
+        "phpunit/phpunit": "^8.0",
+        "squizlabs/php_codesniffer": "^3.4",
+        "symfony/var-dumper": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Antidot\\React\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AntidotTest\\React\\": "test"
+        }
+    },
+    "scripts": {
+        "check-all": [
+            "@cs-check",
+            "@test",
+            "@inspect"
+        ],
+        "cs-check": "phpcs src --colors",
+        "cs-fix": "phpcbf src --colors",
+        "inspect": "phpstan analyse src -l7 --ansi",
+        "test": "phpunit --colors=always"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "zf": {
+            "config-provider": "Antidot\\React\\Container\\Config\\ConfigProvider"
+        }
+    }
+}
