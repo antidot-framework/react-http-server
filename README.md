@@ -5,7 +5,8 @@
 [![Build Status](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/badges/build.png?b=master)](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/build-status/master)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
-Adapter that allows running Antidot Framework Applications on a React PHP server 
+Adapter that allows running [Antidot Framework Applications](https://github.com/antidot-framework/antidot-starter) on a 
+[React PHP server](https://github.com/reactphp/http)
 
 ## Installation:
 
