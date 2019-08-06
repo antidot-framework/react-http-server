@@ -30,7 +30,10 @@ class ConfigProvider
                 'container_path' => 'config/container.php',
                 'router_path' => 'router/routes.php',
                 'middleware_path' => 'router/middleware.php',
-            ]
+            ],
+            'react_socket_server' => [
+                'uri' => 1234,
+            ],
         ];
     }
 }

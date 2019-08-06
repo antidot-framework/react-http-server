@@ -27,7 +27,7 @@ class ReactHttpServer extends Command
 
     protected function configure(): void
     {
-        $this->setName('http:server');
+        $this->setName('react-server:http');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
