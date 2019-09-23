@@ -22,7 +22,7 @@ class ConfigProvider
             ],
             'console' => [
                 'commands' => [
-                    'http:server' => ReactHttpServer::class,
+                    ReactHttpServer::NAME => ReactHttpServer::class,
                 ]
             ],
             'react_http_server' => [

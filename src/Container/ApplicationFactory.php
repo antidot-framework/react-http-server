@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Antidot\React\Container;
 
 use Antidot\Application\Http\Application;
-use Antidot\Application\Http\Middleware\MiddlewarePipeline;
+use Antidot\React\MiddlewarePipeline;
 use Antidot\Application\Http\Middleware\Pipeline;
 use Antidot\Application\Http\Response\ErrorResponseGenerator;
 use Antidot\Application\Http\RouteFactory;

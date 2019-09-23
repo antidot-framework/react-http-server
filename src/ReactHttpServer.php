@@ -17,6 +17,7 @@ use Throwable;
 
 class ReactHttpServer extends Command
 {
+    public const NAME = 'react-server:http';
     private $config;
 
     public function __construct(array $config)
@@ -27,7 +28,7 @@ class ReactHttpServer extends Command
 
     protected function configure(): void
     {
-        $this->setName('react-server:http');
+        $this->setName(self::NAME);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -35,8 +36,17 @@ class ReactHttpServer extends Command
         $loop = Factory::create();
         $middleware = require $this->config['middleware_path'];
         $routes = require $this->config['router_path'];
-        $server = new Server(function (ServerRequestInterface $request) use ($middleware, $routes) {
-            return $this->handle($request, $this->config['container_path'], $middleware, $routes);
+        $container = require $this->config['container_path'];
+        /** @var RequestHandler $application */
+        $application = $container->get(Application::class);
+        $middleware($application, $container);
+        $routes($application, $container);
+        $server = new Server(static function (ServerRequestInterface $request) use ($application) {
+            try {
+                return $application->handle($request);
+            } catch (Throwable $exception) {
+                \dump($exception);
+            }
         });
 
         $socket = new Socketserver($this->config['uri'], $loop);
@@ -47,21 +57,13 @@ class ReactHttpServer extends Command
 
     private function handle(
         ServerRequestInterface $request,
-        string $containerPath,
-        callable $middleware,
-        callable $routes
-    ): ResponseInterface {
+        Application $application
+    ): ResponseInterface
+    {
         try {
-            $container = require $containerPath;
-            /** @var RequestHandler $application */
-            $application = $container->get(Application::class);
-            $middleware($application, $container);
-            $routes($application, $container);
-
             return $application->handle($request);
         } catch (Throwable $exception) {
             \dump($exception);
-            throw $exception;
         }
     }
 }

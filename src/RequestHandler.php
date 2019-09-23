@@ -11,8 +11,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RequestHandler extends Application implements RequestHandlerInterface
 {
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->pipeline->handle($request);
+        /** @var $this->pipeline MiddlewarePipeline */
+        $this->pipeline->reset();
+
+        return  $this->pipeline->handle($request);
     }
 }
