@@ -36,10 +36,18 @@ $aggregator = new ConfigAggregator([
 return $aggregator->getMergedConfig();
 ````
 
-## Running server
+## Running server:
 
-We just need to run a console command and we'll have the server up and running.
+We just need to run a console command and we'll have the server up and running on port `8080`.
 
 ````bash
-bin/console http:server
+bin/console react-server:http
+````
+
+## Server config:
+
+````yaml
+parameters:
+  react_http_server:
+    uri: "localhost:5555"  
 ````

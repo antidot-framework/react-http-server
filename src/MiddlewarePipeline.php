@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Antidot\React;
 
 use Antidot\Application\Http\Handler\NextHandler;
-use Antidot\Application\Http\Middleware\Pipeline;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use SplQueue;
 
-final class MiddlewarePipeline implements Pipeline
+final class MiddlewarePipeline implements Resettable
 {
     private $middlewareCollection;
     private $middlewareCollectionCopy;
@@ -26,7 +25,7 @@ final class MiddlewarePipeline implements Pipeline
     public function pipe(MiddlewareInterface $middleware): void
     {
         $this->middlewareCollection->enqueue($middleware);
-        $this->middlewareCollectionCopy->enqueue($middleware);
+        $this->middlewareCollectionCopy = clone $this->middlewareCollection;
     }
 
     public function reset(): void
@@ -40,7 +39,9 @@ final class MiddlewarePipeline implements Pipeline
         $middleware = $this->middlewareCollection->dequeue();
         $next = clone $this;
 
-        return $middleware->process($request, $next);
+        $response = $middleware->process($request, $next);
+
+        return $response;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
