@@ -30,6 +30,8 @@ class ReactHttpServer extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        ini_set('memory_limit', '6M');
+
         $middleware = require $this->config['middleware_path'];
         $routes = require $this->config['router_path'];
         $container = require $this->config['container_path'];

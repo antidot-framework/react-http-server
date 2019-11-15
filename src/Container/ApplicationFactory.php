@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Antidot\React\Container;
 
-use Antidot\Application\Http\WebServerApplication;
+use Antidot\Application\Http\Application;
 use Antidot\React\MiddlewarePipeline;
 use Antidot\Application\Http\Middleware\Pipeline;
 use Antidot\Application\Http\Response\ErrorResponseGenerator;
@@ -21,7 +21,7 @@ use Zend\HttpHandlerRunner\RequestHandlerRunner;
 
 final class ApplicationFactory
 {
-    public function __invoke(ContainerInterface $container): WebServerApplication
+    public function __invoke(ContainerInterface $container): Application
     {
         $pipeline = new MiddlewarePipeline(new SplQueue());
         $runner = $this->getRunner($container, $pipeline);

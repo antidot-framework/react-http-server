@@ -40,6 +40,7 @@ final class MiddlewarePipeline implements Resettable
         $next = clone $this;
 
         $response = $middleware->process($request, $next);
+        unset($next);
 
         return $response;
     }
@@ -48,6 +49,9 @@ final class MiddlewarePipeline implements Resettable
     {
         $next = new NextHandler($this->middlewareCollection, $handler);
 
-        return $next->handle($request);
+        $response = $next->handle($request);
+        unset($next);
+
+        return $response;
     }
 }
