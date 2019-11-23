@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Antidot\React\Container\Config;
 
 use Antidot\Application\Http\Application;
-use Antidot\Application\Http\WebServerApplication;
+use Antidot\Application\Http\Middleware\Pipeline;
 use Antidot\React\Container\ApplicationFactory;
 use Antidot\React\Container\LoopFactory;
 use Antidot\React\Container\ReactHttpServerFactory;
+use Antidot\React\Container\SocketServerFactory;
+use Antidot\React\MiddlewarePipeline;
 use Antidot\React\ReactHttpServer;
 use React\EventLoop\LoopInterface;
+use React\Socket\ServerInterface;
+use Zend\HttpHandlerRunner\Emitter\EmitterStack;
 
 class ConfigProvider
 {
@@ -18,11 +22,15 @@ class ConfigProvider
     {
         return [
             'dependencies' => [
+                'invokables' => [
+                    Pipeline::class => MiddlewarePipeline::class,
+                ],
                 'factories' => [
                     Application::class => ApplicationFactory::class,
+                    ServerInterface::class => SocketServerFactory::class,
                     LoopInterface::class => LoopFactory::class,
                     ReactHttpServer::class => ReactHttpServerFactory::class,
-                ]
+                ],
             ],
             'console' => [
                 'commands' => [

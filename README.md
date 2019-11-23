@@ -51,3 +51,8 @@ parameters:
   react_http_server:
     uri: "localhost:5555"  
 ````
+
+*DISCLAIMER*
+
+We have a memory leak that we have measured in 6Mb every 15000 requests with a response of 200kb in less than a minute.
+
