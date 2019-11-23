@@ -24,26 +24,6 @@ class ReactRequestHandlerRunner extends RequestHandlerRunner
     private $handler;
 
     /**
-     * A factory capable of generating an error response in the scenario that
-     * the $serverRequestFactory raises an exception during generation of the
-     * request instance.
-     *
-     * The factory will receive the Throwable or Exception that caused the error,
-     * and must return a Psr\Http\Message\ResponseInterface instance.
-     *
-     * @var callable
-     */
-    private $serverRequestErrorResponseGenerator;
-
-    /**
-     * A factory capable of generating a Psr\Http\Message\ServerRequestInterface instance.
-     * The factory will not receive any arguments.
-     *
-     * @var callable
-     */
-    private $serverRequestFactory;
-
-    /**
      * React Http Server
      *
      * @var ServerInterface

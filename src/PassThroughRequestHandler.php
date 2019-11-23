@@ -32,7 +32,6 @@ final class PassThroughRequestHandler implements RequestHandlerInterface
         $next = $this->next;
         /** @var Generator $handlerGenerator */
         $handlerGenerator = $next($request);
-        $next = null;
 
         return new PromiseResponse($handlerGenerator->current());
     }
