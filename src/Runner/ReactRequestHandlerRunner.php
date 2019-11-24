@@ -61,7 +61,7 @@ class ReactRequestHandlerRunner extends RequestHandlerRunner
     public function run(): void
     {
         $server = new Server(function (ServerRequestInterface $request) {
-            $next = clone $this->handler;
+            $next = $this->handler;
             return ($this->handler->__invoke($request, $next))->then(function (ResponseInterface $response) use (
                 $request
             ) {

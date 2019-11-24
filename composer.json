@@ -15,7 +15,8 @@
     ],
     "require": {
         "php": "^7.2.13",
-        "antidot-fw/framework": "dev-master",
+        "antidot-fw/fast-router-adapter": "dev-master",
+        "antidot-fw/framework": "^0.0.2",
         "react/event-loop": "^1.1",
         "react/http": "^0.8.5",
         "react/socket": "^1.3",

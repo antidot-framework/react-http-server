@@ -6,12 +6,14 @@ namespace Antidot\React\Container\Config;
 
 use Antidot\Application\Http\Application;
 use Antidot\Application\Http\Middleware\Pipeline;
+use Antidot\Application\Http\Router;
 use Antidot\React\Container\ApplicationFactory;
 use Antidot\React\Container\LoopFactory;
 use Antidot\React\Container\ReactHttpServerFactory;
 use Antidot\React\Container\SocketServerFactory;
 use Antidot\React\MiddlewarePipeline;
 use Antidot\React\ReactHttpServer;
+use Antidot\React\Router\ReactFastRouter;
 use React\EventLoop\LoopInterface;
 use React\Socket\ServerInterface;
 use Zend\HttpHandlerRunner\Emitter\EmitterStack;
@@ -24,6 +26,7 @@ class ConfigProvider
             'dependencies' => [
                 'invokables' => [
                     Pipeline::class => MiddlewarePipeline::class,
+                    Router::class => ReactFastRouter::class,
                 ],
                 'factories' => [
                     Application::class => ApplicationFactory::class,
