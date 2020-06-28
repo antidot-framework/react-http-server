@@ -18,13 +18,15 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\LoopInterface;
 
+use function array_pop;
+use function var_export;
+
 class ReactFastRouter implements Router
 {
     private RouteCollector $routeCollector;
     private MiddlewareFactory $middlewareFactory;
     private RequestHandlerFactory $requestHandlerFactory;
     private ?Dispatcher\GroupCountBased $dispatcher = null;
-    private array $loadedMiddleware;
     private LoopInterface $loop;
 
     public function __construct(
@@ -36,7 +38,6 @@ class ReactFastRouter implements Router
         $this->middlewareFactory = $middlewareFactory;
         $this->requestHandlerFactory = $requestHandlerFactory;
         $this->loop = $loop;
-        $this->loadedMiddleware = [];
     }
 
     public function append(Route $route): void
@@ -50,32 +51,20 @@ class ReactFastRouter implements Router
             $this->dispatcher = new Dispatcher\GroupCountBased($this->routeCollector->getData());
         }
         $routeInfo = $this->dispatcher->dispatch($request->getMethod(), $request->getUri()->getPath());
-        $handler = array_key_last($routeInfo[1]);
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
             case Dispatcher::METHOD_NOT_ALLOWED:
-                if (array_key_exists($handler, $this->loadedMiddleware)) {
-                    return $this->loadedMiddleware[$handler];
-                }
-                $this->loadedMiddleware[$handler] = new PipedRouteMiddleware(
+                return new PipedRouteMiddleware(
                     new MiddlewarePipeline($this->loop),
                     true,
                     []
                 );
-
-                return $this->loadedMiddleware[$routeInfo[1]];
             case Dispatcher::FOUND:
-                if (array_key_exists($handler, $this->loadedMiddleware)) {
-                    return $this->loadedMiddleware[$handler];
-                }
-
-                $this->loadedMiddleware[$handler] = new PipedRouteMiddleware(
+                return new PipedRouteMiddleware(
                     $this->getPipeline($routeInfo[1]),
                     false,
                     $routeInfo[2]
                 );
-
-                return $this->loadedMiddleware[$handler];
         }
 
         throw new LogicException('Something went wrong in routing.');
