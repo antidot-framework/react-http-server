@@ -8,32 +8,32 @@ use Antidot\Application\Http\Application;
 use Antidot\Application\Http\Middleware\Pipeline;
 use Antidot\Application\Http\Router;
 use Antidot\React\Container\ApplicationFactory;
+use Antidot\React\Container\EmitterFactory;
 use Antidot\React\Container\LoopFactory;
 use Antidot\React\Container\ReactHttpServerFactory;
 use Antidot\React\Container\SocketServerFactory;
 use Antidot\React\MiddlewarePipeline;
 use Antidot\React\ReactHttpServer;
 use Antidot\React\Router\ReactFastRouter;
+use Laminas\HttpHandlerRunner\Emitter\EmitterStack;
 use React\EventLoop\LoopInterface;
 use React\Socket\ServerInterface;
-use Zend\HttpHandlerRunner\Emitter\EmitterStack;
 
 class ConfigProvider
 {
     public function __invoke(): array
     {
         return [
-            'dependencies' => [
-                'invokables' => [
-                    Pipeline::class => MiddlewarePipeline::class,
-                    Router::class => ReactFastRouter::class,
-                ],
-                'factories' => [
-                    Application::class => ApplicationFactory::class,
-                    ServerInterface::class => SocketServerFactory::class,
-                    LoopInterface::class => LoopFactory::class,
-                    ReactHttpServer::class => ReactHttpServerFactory::class,
-                ],
+            'services' => [
+                Pipeline::class => MiddlewarePipeline::class,
+                Router::class => ReactFastRouter::class,
+            ],
+            'factories' => [
+                Application::class => ApplicationFactory::class,
+                ServerInterface::class => SocketServerFactory::class,
+                EmitterStack::class => EmitterFactory::class,
+                LoopInterface::class => LoopFactory::class,
+                ReactHttpServer::class => ReactHttpServerFactory::class,
             ],
             'console' => [
                 'commands' => [

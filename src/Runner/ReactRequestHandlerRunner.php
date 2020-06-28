@@ -4,36 +4,33 @@ declare(strict_types=1);
 
 namespace Antidot\React\Runner;
 
-use Antidot\Application\Http\Middleware\Pipeline;
 use Antidot\React\CallablePipeline;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\Server;
 use React\Socket\ServerInterface;
+use Throwable;
 use Zend\HttpHandlerRunner\Emitter\EmitterStack;
 use Zend\HttpHandlerRunner\RequestHandlerRunner;
+
+use function React\Promise\resolve;
+use function sprintf;
+use function strpos;
 
 class ReactRequestHandlerRunner extends RequestHandlerRunner
 {
     /**
      * A request handler to run as the application.
-     *
-     * @var CallablePipeline
      */
-    private $handler;
+    private CallablePipeline $handler;
 
     /**
      * React Http Server
-     *
-     * @var ServerInterface
      */
-    private $socketServer;
+    private ServerInterface $socketServer;
 
-    /**
-     * @var LoopInterface
-     */
-    private $loop;
+    private LoopInterface $loop;
     /** @var callable * */
     private $errorResponseGenerator;
 
@@ -60,22 +57,23 @@ class ReactRequestHandlerRunner extends RequestHandlerRunner
 
     public function run(): void
     {
-        $server = new Server(function (ServerRequestInterface $request) {
-            $next = $this->handler;
-            return ($this->handler->__invoke($request, $next))->then(function (ResponseInterface $response) use (
+        $handler = $this->handler;
+        $errorResponseGenerator = $this->errorResponseGenerator;
+        $server = new Server(static function (ServerRequestInterface $request) use ($handler, $errorResponseGenerator) {
+            $next = clone $handler;
+            return resolve($handler->__invoke($request, $next)->then(static function (ResponseInterface $response) use (
                 $request
             ) {
-                $this->printResponse($request, $response);
+                self::printResponse($request, $response);
                 return $response;
-            }, function (\Throwable $e) use ($request) {
-                $errorResponseGenerator = $this->errorResponseGenerator;
-                $this->printErrorResponse($request);
+            }, static function (Throwable $e) use ($request, $errorResponseGenerator) {
+                self::printErrorResponse($request);
 
-                return $errorResponseGenerator(null === $e->getPrevious() ? $e : $e->getPrevious());
-            });
+                return $errorResponseGenerator($e->getPrevious() ?? $e);
+            }));
         });
-        $server->on('error', function (\Throwable $e) {
-            $this->printServerError($e);
+        $server->on('error', static function (Throwable $e) {
+            self::printServerError($e);
         });
         $server->listen($this->socketServer);
 
@@ -110,9 +108,9 @@ class ReactRequestHandlerRunner extends RequestHandlerRunner
         ) . PHP_EOL;
     }
 
-    private function printServerError(\Throwable $e): void
+    private function printServerError(Throwable $e): void
     {
-        $e = null === $e->getPrevious() ? $e : $e->getPrevious();
+        $e = $e->getPrevious() ?? $e;
 
         echo sprintf(
             '[%s]: Server error occurred: %s, in file %s in line %s',

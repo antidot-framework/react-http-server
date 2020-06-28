@@ -9,7 +9,7 @@ use React\Promise\PromiseInterface;
 
 class PromiseResponse extends Response implements PromiseInterface
 {
-    private $promise;
+    private PromiseInterface $promise;
 
     public function __construct(
         PromiseInterface $promise,
@@ -21,8 +21,11 @@ class PromiseResponse extends Response implements PromiseInterface
         $this->promise = $promise;
     }
 
-    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
-    {
+    public function then(
+        callable $onFulfilled = null,
+        callable $onRejected = null,
+        callable $onProgress = null
+    ): PromiseInterface {
         return $this->promise->then($onFulfilled, $onRejected, $onProgress);
     }
 

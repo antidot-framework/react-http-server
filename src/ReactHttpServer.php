@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ReactHttpServer extends Command
 {
     public const NAME = 'react-server:http';
-    private $config;
+    private array $config;
 
     public function __construct(array $config)
     {

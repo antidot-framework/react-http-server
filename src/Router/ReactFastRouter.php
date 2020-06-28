@@ -20,12 +20,12 @@ use React\EventLoop\LoopInterface;
 
 class ReactFastRouter implements Router
 {
-    private $routeCollector;
-    private $middlewareFactory;
-    private $requestHandlerFactory;
-    private $dispatcher;
-    private $loadedMiddleware;
-    private $loop;
+    private RouteCollector $routeCollector;
+    private MiddlewareFactory $middlewareFactory;
+    private RequestHandlerFactory $requestHandlerFactory;
+    private ?Dispatcher\GroupCountBased $dispatcher = null;
+    private array $loadedMiddleware;
+    private LoopInterface $loop;
 
     public function __construct(
         MiddlewareFactory $middlewareFactory,

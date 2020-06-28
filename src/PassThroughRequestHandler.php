@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function React\Promise\resolve;
+
 /**
  * @internal
  */
@@ -29,10 +31,7 @@ final class PassThroughRequestHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $next = $this->next;
-        /** @var Generator $handlerGenerator */
-        $handlerGenerator = $next($request);
-
-        return new PromiseResponse($handlerGenerator->current());
+        return new PromiseResponse(resolve($this->next)
+            ->then(static fn($next) => $next($request)->current()));
     }
 }
