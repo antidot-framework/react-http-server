@@ -1,6 +1,6 @@
 # Antidot React PHP HTTP Server
 
-> [DEPRECATED] This package will not be mantained any more. if you want to goin react with Antidot framework, take a look at [Reactive Starter package](https://github.com/antidot-framework/reactive-antidot-starter)
+> [DEPRECATED] This package will not be mantained any more. if you want to go react with Antidot framework, take a look at [Reactive Starter package](https://github.com/antidot-framework/reactive-antidot-starter)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/antidot-framework/react-http-server/?branch=master)
